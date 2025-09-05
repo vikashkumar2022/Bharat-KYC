@@ -1,0 +1,17 @@
+<!-- This is a placeholder SVG icon file -->
+<!-- In production, replace with actual PNG icons -->
+<svg width="192" height="192" viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg">
+  <rect width="192" height="192" rx="24" fill="#2E7D32"/>
+  <g transform="translate(48, 48)">
+    <!-- Shield icon -->
+    <path d="M48 12L24 24v20c0 24 16 40 24 40s24-16 24-40V24L48 12z" fill="#ffffff"/>
+    <!-- Check mark -->
+    <path d="M36 60l12 12 24-24" stroke="#2E7D32" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <text x="96" y="120" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="14" font-weight="bold">
+    BharatKYC
+  </text>
+  <text x="96" y="140" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="12">
+    Lite
+  </text>
+</svg>

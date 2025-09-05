@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BharatKYC Lite - Digital Identity Verification</title>
+    <meta name="description" content="Secure KYC verification for Indian citizens">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#FF6B35">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        .screen {
+            display: none;
+            padding: 20px;
+            min-height: 100vh;
+            animation: slideIn 0.3s ease-in-out;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px 0;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(45deg, #FF6B35, #F7931E);
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        h1 {
+            color: #2c3e50;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            color: #2c3e50;
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e1e8ed;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #FF6B35;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #FF6B35, #F7931E);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+        }
+
+        .btn-secondary {
+            background: #ecf0f1;
+            color: #2c3e50;
+        }
+
+        .btn-secondary:hover {
+            background: #d5dbdb;
+        }
+
+        .document-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .document-card {
+            border: 2px solid #e1e8ed;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .document-card:hover {
+            border-color: #FF6B35;
+            transform: translateY(-2px);
+        }
+
+        .document-card.selected {
+            border-color: #FF6B35;
+            background: #fff5f0;
+        }
+
+        .document-icon {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .photo-capture {
+            margin: 20px 0;
+        }
+
+        .camera-container {
+            position: relative;
+            width: 100%;
+            max-width: 300px;
+            margin: 0 auto;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #f8f9fa;
+        }
+
+        #video {
+            width: 100%;
+            height: auto;
+        }
+
+        .capture-btn {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #FF6B35;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .preview-image {
+            max-width: 100%;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+
+        .error {
+            color: #e74c3c;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .success {
+            color: #27ae60;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #ecf0f1;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(45deg, #FF6B35, #F7931E);
+            transition: width 0.3s;
+        }
+
+        .loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 0;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #ecf0f1;
+            border-top: 4px solid #FF6B35;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .status-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .status-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .success-icon {
+            color: #27ae60;
+        }
+
+        .certificate {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Welcome Screen -->
+        <div class="screen active" id="welcome-screen">
+            <div class="header">
+                <div class="logo">🇮🇳</div>
+                <h1>BharatKYC Lite</h1>
+                <p class="subtitle">Secure Digital Identity Verification for India</p>
+            </div>
+
+            <div class="form-group">
+                <label>Select Language / भाषा चुनें</label>
+                <select id="language">
+                    <option value="en">English</option>
+                    <option value="hi">हिंदी (Hindi)</option>
+                    <option value="te">తెలుగు (Telugu)</option>
+                    <option value="ta">தமிழ் (Tamil)</option>
+                </select>
+            </div>
+
+            <button class="btn btn-primary" onclick="startVerification()">
+                Start Verification / सत्यापन शुरू करें
+            </button>
+
+            <div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 8px;">
+                <h3>Features:</h3>
+                <ul style="margin-top: 10px;">
+                    <li>✅ Aadhaar & PAN Verification</li>
+                    <li>✅ Secure Document Upload</li>
+                    <li>✅ Real-time Validation</li>
+                    <li>✅ Instant Certificate</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Personal Details Screen -->
+        <div class="screen" id="details-screen">
+            <div class="header">
+                <h2>Personal Details</h2>
+                <p class="subtitle">Enter your information accurately</p>
+            </div>
+
+            <form id="personal-form">
+                <div class="form-group">
+                    <label>Full Name *</label>
+                    <input type="text" id="fullName" required placeholder="As per official documents">
+                    <div class="error" id="nameError"></div>
+                </div>
+
+                <div class="form-group">
+                    <label>Mobile Number *</label>
+                    <input type="tel" id="mobile" required placeholder="10-digit mobile number" pattern="[0-9]{10}">
+                    <div class="error" id="mobileError"></div>
+                </div>
+
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="email" placeholder="Optional">
+                </div>
+
+                <div class="form-group">
+                    <label>Date of Birth *</label>
+                    <input type="date" id="dob" required>
+                    <div class="error" id="dobError"></div>
+                </div>
+
+                <div class="form-group">
+                    <label>Address *</label>
+                    <input type="text" id="address" required placeholder="Current address">
+                    <div class="error" id="addressError"></div>
+                </div>
+            </form>
+
+            <button class="btn btn-primary" onclick="validateAndProceed()">
+                Continue to Document Selection
+            </button>
+            <button class="btn btn-secondary" onclick="goBack('welcome-screen')">
+                Back
+            </button>
+        </div>
+
+        <!-- Document Selection Screen -->
+        <div class="screen" id="document-screen">
+            <div class="header">
+                <h2>Select Document Type</h2>
+                <p class="subtitle">Choose your primary identity document</p>
+            </div>
+
+            <div class="document-grid">
+                <div class="document-card" onclick="selectDocument('aadhaar')">
+                    <div class="document-icon">🆔</div>
+                    <h3>Aadhaar Card</h3>
+                    <p>12-digit unique ID</p>
+                </div>
+                
+                <div class="document-card" onclick="selectDocument('pan')">
+                    <div class="document-icon">💳</div>
+                    <h3>PAN Card</h3>
+                    <p>Permanent Account Number</p>
+                </div>
+                
+                <div class="document-card" onclick="selectDocument('voter')">
+                    <div class="document-icon">🗳️</div>
+                    <h3>Voter ID</h3>
+                    <p>Election Commission ID</p>
+                </div>
+                
+                <div class="document-card" onclick="selectDocument('license')">
+                    <div class="document-icon">🚗</div>
+                    <h3>Driving License</h3>
+                    <p>Transport Department ID</p>
+                </div>
+            </div>
+
+            <div id="document-details" style="display: none;">
+                <div class="form-group">
+                    <label id="document-number-label">Document Number *</label>
+                    <input type="text" id="documentNumber" required>
+                    <div class="error" id="docError"></div>
+                </div>
+            </div>
+
+            <button class="btn btn-primary" id="continue-upload" onclick="goToUpload()" style="display: none;">
+                Continue to Upload
+            </button>
+            <button class="btn btn-secondary" onclick="goBack('details-screen')">
+                Back
+            </button>
+        </div>
+
+        <!-- Photo & Document Upload Screen -->
+        <div class="screen" id="upload-screen">
+            <div class="header">
+                <h2>Upload Documents</h2>
+                <p class="subtitle">Take photo and upload document</p>
+            </div>
+
+            <!-- Selfie Section -->
+            <div class="photo-capture">
+                <h3>Step 1: Take Selfie</h3>
+                <div class="camera-container" id="camera-container">
+                    <video id="video" autoplay playsinline style="display: none;"></video>
+                    <canvas id="canvas" style="display: none;"></canvas>
+                    <div id="camera-placeholder" style="padding: 40px; text-align: center; background: #f8f9fa;">
+                        <p>📷 Camera will appear here</p>
+                        <button class="btn btn-primary" onclick="startCamera()">Start Camera</button>
+                    </div>
+                </div>
+                <button class="capture-btn" id="capture-btn" onclick="capturePhoto()" style="display: none;">📷</button>
+                <input type="file" id="selfie-upload" accept="image/*" style="display: none;" onchange="handleSelfieUpload(this)">
+                <button class="btn btn-secondary" onclick="document.getElementById('selfie-upload').click()">
+                    Upload Photo Instead
+                </button>
+                <img id="selfie-preview" class="preview-image" style="display: none;">
+                <div class="success" id="selfie-success" style="display: none;">✅ Selfie captured successfully</div>
+            </div>
+
+            <!-- Document Upload Section -->
+            <div class="photo-capture">
+                <h3>Step 2: Upload Document</h3>
+                <input type="file" id="document-upload" accept="image/*" onchange="handleDocumentUpload(this)">
+                <img id="document-preview" class="preview-image" style="display: none;">
+                <div class="success" id="document-success" style="display: none;">✅ Document uploaded successfully</div>
+            </div>
+
+            <button class="btn btn-primary" id="submit-verification" onclick="submitVerification()" disabled>
+                Submit for Verification
+            </button>
+            <button class="btn btn-secondary" onclick="goBack('document-screen')">
+                Back
+            </button>
+        </div>
+
+        <!-- Processing Screen -->
+        <div class="screen" id="processing-screen">
+            <div class="header">
+                <h2>Verifying Your Documents</h2>
+                <p class="subtitle">Please wait while we process your information</p>
+            </div>
+
+            <div class="loading">
+                <div class="spinner"></div>
+                <p id="processing-status">Analyzing documents...</p>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+            </div>
+
+            <div id="processing-steps">
+                <div class="status-card">
+                    <p id="step1">⏳ Validating document authenticity...</p>
+                </div>
+                <div class="status-card">
+                    <p id="step2">⏳ Matching facial features...</p>
+                </div>
+                <div class="status-card">
+                    <p id="step3">⏳ Cross-referencing databases...</p>
+                </div>
+                <div class="status-card">
+                    <p id="step4">⏳ Generating verification certificate...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Success Screen -->
+        <div class="screen" id="success-screen">
+            <div class="header">
+                <div class="status-icon success-icon">✅</div>
+                <h2>Verification Successful!</h2>
+                <p class="subtitle">Your identity has been verified successfully</p>
+            </div>
+
+            <div class="certificate">
+                <h3>🏆 Digital Verification Certificate</h3>
+                <p><strong>Name:</strong> <span id="cert-name"></span></p>
+                <p><strong>Document:</strong> <span id="cert-document"></span></p>
+                <p><strong>Verified on:</strong> <span id="cert-date"></span></p>
+                <p><strong>Certificate ID:</strong> <span id="cert-id"></span></p>
+            </div>
+
+            <button class="btn btn-primary" onclick="downloadCertificate()">
+                📄 Download Certificate
+            </button>
+            <button class="btn btn-secondary" onclick="startNew()">
+                Start New Verification
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let currentScreen = 'welcome-screen';
+        let selectedDocument = '';
+        let capturedSelfie = null;
+        let uploadedDocument = null;
+        let verificationData = {};
+
+        // Navigation functions
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            document.getElementById(screenId).classList.add('active');
+            currentScreen = screenId;
+        }
+
+        function goBack(screenId) {
+            showScreen(screenId);
+        }
+
+        function startVerification() {
+            showScreen('details-screen');
+        }
+
+        // Form validation
+        function validateAndProceed() {
+            const form = document.getElementById('personal-form');
+            const formData = new FormData(form);
+            let isValid = true;
+
+            // Clear previous errors
+            document.querySelectorAll('.error').forEach(error => error.textContent = '');
+
+            // Validate full name
+            const fullName = document.getElementById('fullName').value.trim();
+            if (!fullName || fullName.length < 2) {
+                document.getElementById('nameError').textContent = 'Please enter a valid full name';
+                isValid = false;
+            }
+
+            // Validate mobile
+            const mobile = document.getElementById('mobile').value.trim();
+            if (!mobile || !/^[0-9]{10}$/.test(mobile)) {
+                document.getElementById('mobileError').textContent = 'Please enter a valid 10-digit mobile number';
+                isValid = false;
+            }
+
+            // Validate date of birth
+            const dob = document.getElementById('dob').value;
+            if (!dob) {
+                document.getElementById('dobError').textContent = 'Please select your date of birth';
+                isValid = false;
+            } else {
+                const dobDate = new Date(dob);
+                const today = new Date();
+                const age = today.getFullYear() - dobDate.getFullYear();
+                if (age < 18 || age > 100) {
+                    document.getElementById('dobError').textContent = 'Age must be between 18 and 100 years';
+                    isValid = false;
+                }
+            }
+
+            // Validate address
+            const address = document.getElementById('address').value.trim();
+            if (!address || address.length < 10) {
+                document.getElementById('addressError').textContent = 'Please enter a complete address';
+                isValid = false;
+            }
+
+            if (isValid) {
+                // Store form data
+                verificationData.personalDetails = {
+                    fullName,
+                    mobile,
+                    email: document.getElementById('email').value,
+                    dob,
+                    address
+                };
+                showScreen('document-screen');
+            }
+        }
+
+        // Document selection
+        function selectDocument(docType) {
+            selectedDocument = docType;
+            
+            // Remove previous selection
+            document.querySelectorAll('.document-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // Add selection to clicked card
+            event.target.closest('.document-card').classList.add('selected');
+            
+            // Show document number input
+            const detailsDiv = document.getElementById('document-details');
+            const label = document.getElementById('document-number-label');
+            const input = document.getElementById('documentNumber');
+            
+            switch(docType) {
+                case 'aadhaar':
+                    label.textContent = 'Aadhaar Number (12 digits) *';
+                    input.placeholder = 'XXXX XXXX XXXX';
+                    input.pattern = '[0-9]{12}';
+                    break;
+                case 'pan':
+                    label.textContent = 'PAN Number *';
+                    input.placeholder = 'ABCDE1234F';
+                    input.pattern = '[A-Z]{5}[0-9]{4}[A-Z]{1}';
+                    break;
+                case 'voter':
+                    label.textContent = 'Voter ID Number *';
+                    input.placeholder = 'ABC1234567';
+                    input.pattern = '[A-Z]{3}[0-9]{7}';
+                    break;
+                case 'license':
+                    label.textContent = 'License Number *';
+                    input.placeholder = 'DL-0123456789012';
+                    input.pattern = '';
+                    break;
+            }
+            
+            detailsDiv.style.display = 'block';
+            document.getElementById('continue-upload').style.display = 'block';
+            
+            verificationData.documentType = docType;
+        }
+
+        function goToUpload() {
+            const docNumber = document.getElementById('documentNumber').value.trim();
+            if (!docNumber) {
+                document.getElementById('docError').textContent = 'Please enter document number';
+                return;
+            }
+            
+            verificationData.documentNumber = docNumber;
+            showScreen('upload-screen');
+        }
+
+        // Camera functions
+        async function startCamera() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { facingMode: 'user', width: 300, height: 300 } 
+                });
+                
+                const video = document.getElementById('video');
+                const placeholder = document.getElementById('camera-placeholder');
+                const captureBtn = document.getElementById('capture-btn');
+                
+                video.srcObject = stream;
+                video.style.display = 'block';
+                placeholder.style.display = 'none';
+                captureBtn.style.display = 'block';
+                
+            } catch (error) {
+                console.error('Camera access denied:', error);
+                alert('Camera access denied. Please use the upload option instead.');
+            }
+        }
+
+        function capturePhoto() {
+            const video = document.getElementById('video');
+            const canvas = document.getElementById('canvas');
+            const preview = document.getElementById('selfie-preview');
+            const success = document.getElementById('selfie-success');
+            
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(video, 0, 0);
+            
+            canvas.toBlob(blob => {
+                capturedSelfie = blob;
+                preview.src = URL.createObjectURL(blob);
+                preview.style.display = 'block';
+                success.style.display = 'block';
+                
+                // Stop camera
+                const stream = video.srcObject;
+                if (stream) {
+                    stream.getTracks().forEach(track => track.stop());
+                }
+                video.style.display = 'none';
+                document.getElementById('capture-btn').style.display = 'none';
+                
+                checkUploadComplete();
+            });
+        }
+
+        function handleSelfieUpload(input) {
+            if (input.files && input.files[0]) {
+                capturedSelfie = input.files[0];
+                const preview = document.getElementById('selfie-preview');
+                const success = document.getElementById('selfie-success');
+                
+                preview.src = URL.createObjectURL(capturedSelfie);
+                preview.style.display = 'block';
+                success.style.display = 'block';
+                
+                checkUploadComplete();
+            }
+        }
+
+        function handleDocumentUpload(input) {
+            if (input.files && input.files[0]) {
+                uploadedDocument = input.files[0];
+                const preview = document.getElementById('document-preview');
+                const success = document.getElementById('document-success');
+                
+                preview.src = URL.createObjectURL(uploadedDocument);
+                preview.style.display = 'block';
+                success.style.display = 'block';
+                
+                checkUploadComplete();
+            }
+        }
+
+        function checkUploadComplete() {
+            const submitBtn = document.getElementById('submit-verification');
+            if (capturedSelfie && uploadedDocument) {
+                submitBtn.disabled = false;
+                submitBtn.style.background = 'linear-gradient(45deg, #FF6B35, #F7931E)';
+            }
+        }
+
+        // Verification process
+        function submitVerification() {
+            if (!capturedSelfie || !uploadedDocument) {
+                alert('Please complete both selfie and document upload');
+                return;
+            }
+            
+            showScreen('processing-screen');
+            simulateProcessing();
+        }
+
+        function simulateProcessing() {
+            const progressFill = document.getElementById('progress-fill');
+            const statusText = document.getElementById('processing-status');
+            const steps = ['step1', 'step2', 'step3', 'step4'];
+            
+            let progress = 0;
+            let currentStep = 0;
+            
+            const processingMessages = [
+                'Analyzing document authenticity...',
+                'Matching facial features...',
+                'Cross-referencing databases...',
+                'Generating verification certificate...',
+                'Verification complete!'
+            ];
+            
+            const interval = setInterval(() => {
+                progress += 25;
+                progressFill.style.width = progress + '%';
+                statusText.textContent = processingMessages[currentStep];
+                
+                if (currentStep < steps.length) {
+                    document.getElementById(steps[currentStep]).innerHTML = '✅ ' + processingMessages[currentStep].replace('...', ' - Complete');
+                }
+                
+                currentStep++;
+                
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        showVerificationResult();
+                    }, 1000);
+                }
+            }, 1500);
+        }
+
+        function showVerificationResult() {
+            // Populate certificate data
+            document.getElementById('cert-name').textContent = verificationData.personalDetails.fullName;
+            document.getElementById('cert-document').textContent = selectedDocument.toUpperCase() + ' - ' + verificationData.documentNumber;
+            document.getElementById('cert-date').textContent = new Date().toLocaleDateString();
+            document.getElementById('cert-id').textContent = 'BKL' + Date.now().toString().slice(-8);
+            
+            showScreen('success-screen');
+        }
+
+        function downloadCertificate() {
+            const certData = {
+                name: verificationData.personalDetails.fullName,
+                document: selectedDocument.toUpperCase(),
+                documentNumber: verificationData.documentNumber,
+                verifiedDate: new Date().toLocaleDateString(),
+                certificateId: 'BKL' + Date.now().toString().slice(-8)
+            };
+            
+            const certText = `
+BHARATKYC LITE - DIGITAL VERIFICATION CERTIFICATE
+
+Name: ${certData.name}
+Document Type: ${certData.document}
+Document Number: ${certData.documentNumber}
+Verification Date: ${certData.verifiedDate}
+Certificate ID: ${certData.certificateId}
+
+This certificate confirms successful identity verification.
+            `;
+            
+            const blob = new Blob([certText], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `BharatKYC_Certificate_${certData.certificateId}.txt`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function startNew() {
+            // Reset all data
+            selectedDocument = '';
+            capturedSelfie = null;
+            uploadedDocument = null;
+            verificationData = {};
+            
+            // Reset form
+            document.getElementById('personal-form').reset();
+            document.getElementById('documentNumber').value = '';
+            
+            // Reset UI elements
+            document.querySelectorAll('.document-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            document.getElementById('document-details').style.display = 'none';
+            document.getElementById('continue-upload').style.display = 'none';
+            document.getElementById('submit-verification').disabled = true;
+            
+            // Reset previews
+            document.getElementById('selfie-preview').style.display = 'none';
+            document.getElementById('document-preview').style.display = 'none';
+            document.getElementById('selfie-success').style.display = 'none';
+            document.getElementById('document-success').style.display = 'none';
+            
+            showScreen('welcome-screen');
+        }
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('BharatKYC Lite initialized successfully');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BharatKYC Lite - Document Verification</title>
+    <link rel="stylesheet" href="src/css/main.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2E7D32">
+    <link rel="icon" type="image/svg+xml" href="src/icons/icon-192x192.svg">
+</head>
+<body>
+    <!-- Main App Container -->
+    <div id="app" class="app-container">
+        
+        <!-- Loading Screen -->
+        <div id="loading-screen" class="screen active">
+            <div class="loading-container">
+                <div class="app-logo">
+                    <div class="shield-icon">🛡️</div>
+                    <h1>BharatKYC Lite</h1>
+                </div>
+                <div class="loading-spinner"></div>
+                <p class="loading-text">Loading securely...</p>
+            </div>
+        </div>
+
+        <!-- Welcome Screen -->
+        <div id="welcome-screen" class="screen">
+            <div class="screen-container">
+                <div class="header">
+                    <div class="app-logo">
+                        <div class="shield-icon">🛡️</div>
+                        <h1>BharatKYC Lite</h1>
+                    </div>
+                    <p class="tagline">Secure Document Verification for India</p>
+                </div>
+
+                <div class="welcome-content">
+                    <div class="features-preview">
+                        <div class="feature-item">
+                            <span class="feature-icon">📄</span>
+                            <div class="feature-text">
+                                <h3>Document Verification</h3>
+                                <p>Aadhaar, PAN, Voter ID & more</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">📸</span>
+                            <div class="feature-text">
+                                <h3>Smart Camera</h3>
+                                <p>Auto-capture with quality check</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">🔒</span>
+                            <div class="feature-text">
+                                <h3>Secure & Private</h3>
+                                <p>Bank-level security standards</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="language-selector">
+                        <label for="language-select">भाषा / Language:</label>
+                        <select id="language-select">
+                            <option value="en">English</option>
+                            <option value="hi">हिन्दी</option>
+                            <option value="ta">தமிழ்</option>
+                            <option value="te">తెలుగు</option>
+                        </select>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button id="start-verification-btn" class="primary-btn">
+                            🚀 Start Verification
+                        </button>
+                        <button id="learn-more-btn" class="secondary-btn">
+                            📚 Learn More
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Document Selection Screen -->
+        <div id="document-selection-screen" class="screen">
+            <div class="screen-container">
+                <div class="header">
+                    <button class="back-btn">←</button>
+                    <h2>Select Document Type</h2>
+                    <div class="progress-indicator">2/11</div>
+                </div>
+
+                <div class="document-grid">
+                    <div class="document-card" data-doc="aadhaar">
+                        <div class="doc-icon">🆔</div>
+                        <h3>Aadhaar Card</h3>
+                        <p>12-digit unique identity</p>
+                    </div>
+                    <div class="document-card" data-doc="pan">
+                        <div class="doc-icon">💳</div>
+                        <h3>PAN Card</h3>
+                        <p>Permanent Account Number</p>
+                    </div>
+                    <div class="document-card" data-doc="voter">
+                        <div class="doc-icon">🗳️</div>
+                        <h3>Voter ID</h3>
+                        <p>Election Commission ID</p>
+                    </div>
+                    <div class="document-card" data-doc="passport">
+                        <div class="doc-icon">📘</div>
+                        <h3>Passport</h3>
+                        <p>International travel document</p>
+                    </div>
+                    <div class="document-card" data-doc="driving">
+                        <div class="doc-icon">🚗</div>
+                        <h3>Driving License</h3>
+                        <p>Vehicle operation permit</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Success Screen -->
+        <div id="success-screen" class="screen">
+            <div class="screen-container text-center">
+                <div class="success-animation">
+                    <div class="checkmark">✅</div>
+                </div>
+                <h2>Verification Successful!</h2>
+                <p>Your document has been verified successfully.</p>
+                
+                <div class="action-buttons">
+                    <button id="download-certificate-btn" class="primary-btn">
+                        📄 Download Certificate
+                    </button>
+                    <button id="verify-another-btn" class="secondary-btn">
+                        🔄 Verify Another Document
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simple application logic
+        console.log('🚀 BharatKYC Lite - Starting...');
+
+        // DOM elements
+        const loadingScreen = document.getElementById('loading-screen');
+        const welcomeScreen = document.getElementById('welcome-screen');
+        const docSelectionScreen = document.getElementById('document-selection-screen');
+        const successScreen = document.getElementById('success-screen');
+
+        // Navigation functions
+        function showScreen(screenId) {
+            console.log('📱 Navigating to:', screenId);
+            
+            // Hide all screens
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            
+            // Show target screen
+            const targetScreen = document.getElementById(screenId);
+            if (targetScreen) {
+                targetScreen.classList.add('active');
+                console.log('✅ Screen shown:', screenId);
+            } else {
+                console.error('❌ Screen not found:', screenId);
+            }
+        }
+
+        // Initialize app
+        function initApp() {
+            console.log('🎬 Initializing app...');
+            
+            // Set up event listeners
+            document.getElementById('start-verification-btn').addEventListener('click', () => {
+                showScreen('document-selection-screen');
+            });
+
+            document.getElementById('learn-more-btn').addEventListener('click', () => {
+                alert('BharatKYC Lite provides secure, fast document verification for Indian citizens. Features include offline support, multiple document types, and bank-level security.');
+            });
+
+            // Document selection
+            document.querySelectorAll('.document-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const docType = card.dataset.doc;
+                    console.log('📄 Selected document:', docType);
+                    
+                    // Simulate verification process
+                    setTimeout(() => {
+                        showScreen('success-screen');
+                    }, 1000);
+                });
+            });
+
+            // Back button
+            document.querySelector('.back-btn').addEventListener('click', () => {
+                showScreen('welcome-screen');
+            });
+
+            // Success screen buttons
+            document.getElementById('download-certificate-btn').addEventListener('click', () => {
+                alert('Certificate download would start here!');
+            });
+
+            document.getElementById('verify-another-btn').addEventListener('click', () => {
+                showScreen('welcome-screen');
+            });
+
+            // Show welcome screen after 2 seconds
+            setTimeout(() => {
+                showScreen('welcome-screen');
+                console.log('✅ App ready!');
+            }, 2000);
+        }
+
+        // Start the app
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initApp);
+        } else {
+            initApp();
+        }
+
+        console.log('📱 BharatKYC Lite loaded successfully');
+    </script>
+</body>
+</html>

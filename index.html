@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#2E7D32">
+    <meta name="description" content="BharatKYC Lite - Simple, secure document verification for India">
+    
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" sizes="192x192" href="src/icons/icon-192x192.png">
+    <link rel="apple-touch-icon" href="src/icons/icon-192x192.png">
+    
+    <!-- Preload Critical Resources -->
+    <link rel="preload" href="src/css/main.css" as="style">
+    <link rel="preload" href="src/js/app.js" as="script">
+    
+    <title>BharatKYC Lite - Secure Document Verification</title>
+    <link rel="stylesheet" href="src/css/main.css">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="screen active">
+        <div class="loading-container">
+            <div class="logo">
+                <div class="shield-icon">🛡️</div>
+                <h1>BharatKYC Lite</h1>
+            </div>
+            <div class="loading-spinner"></div>
+            <p class="loading-text">Loading securely...</p>
+        </div>
+    </div>
+
+    <!-- App Container -->
+    <div id="app" class="app-container">
+        <!-- Progress Indicator -->
+        <div class="progress-header">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+            <span class="step-counter" id="step-counter">Step 1 of 5</span>
+        </div>
+
+        <!-- Screen 1: Welcome & Permissions -->
+        <div id="welcome-screen" class="screen">
+            <div class="screen-content">
+                <div class="welcome-illustration">
+                    <div class="shield-check">🛡️✓</div>
+                </div>
+                <h1 class="screen-title">Welcome to BharatKYC Lite!</h1>
+                <p class="screen-subtitle">Let's get you verified safely and securely</p>
+                
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <span class="feature-icon">📱</span>
+                        <span>Works on any device</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">🔒</span>
+                        <span>100% secure & private</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">⚡</span>
+                        <span>Works offline too</span>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button class="btn btn-primary" id="get-started-btn">
+                        <span>Get Started</span>
+                        <span class="btn-icon">→</span>
+                    </button>
+                    <button class="btn btn-secondary" id="listen-instructions-btn">
+                        <span class="btn-icon">🎵</span>
+                        <span>Listen to Instructions</span>
+                    </button>
+                </div>
+
+                <div class="language-selector">
+                    <label for="language-select">Language:</label>
+                    <select id="language-select" class="language-dropdown">
+                        <option value="en">English</option>
+                        <option value="hi">हिंदी</option>
+                        <option value="ta">தமிழ்</option>
+                        <option value="te">తెలుగు</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Screen 2: Document Selection -->
+        <div id="document-selection-screen" class="screen">
+            <div class="screen-content">
+                <h2 class="screen-title">Select Your Document</h2>
+                <p class="screen-subtitle">Which document would you like to use for verification?</p>
+                
+                <div class="document-grid">
+                    <div class="document-card recommended" data-doc-type="aadhaar">
+                        <div class="doc-icon">🆔</div>
+                        <h3>Aadhaar Card</h3>
+                        <div class="recommended-badge">Recommended</div>
+                        <p>Most commonly accepted</p>
+                    </div>
+                    <div class="document-card" data-doc-type="pan">
+                        <div class="doc-icon">💳</div>
+                        <h3>PAN Card</h3>
+                        <p>Tax identification</p>
+                    </div>
+                    <div class="document-card" data-doc-type="driving-license">
+                        <div class="doc-icon">🚗</div>
+                        <h3>Driving License</h3>
+                        <p>Government issued ID</p>
+                    </div>
+                    <div class="document-card" data-doc-type="voter-id">
+                        <div class="doc-icon">🗳️</div>
+                        <h3>Voter ID</h3>
+                        <p>Election commission ID</p>
+                    </div>
+                </div>
+
+                <div class="alternative-option">
+                    <p>Or use digital documents:</p>
+                    <button class="btn btn-outline" id="digilocker-btn">
+                        <span class="btn-icon">☁️</span>
+                        <span>Connect DigiLocker</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Screen 3: Capture Method Selection -->
+        <div id="capture-method-screen" class="screen">
+            <div class="screen-content">
+                <h2 class="screen-title">How would you like to capture?</h2>
+                <p class="screen-subtitle">Choose the method that works best for you</p>
+                
+                <div class="method-options">
+                    <div class="method-card" id="camera-capture-option">
+                        <div class="method-icon">📷</div>
+                        <h3>Take Photo</h3>
+                        <p>Use your device camera to capture the document</p>
+                        <div class="method-benefits">
+                            <span>✓ Best quality</span>
+                            <span>✓ Auto-detect</span>
+                        </div>
+                    </div>
+                    
+                    <div class="method-card" id="file-upload-option">
+                        <div class="method-icon">📁</div>
+                        <h3>Upload Photo</h3>
+                        <p>Select an existing photo from your device</p>
+                        <div class="method-benefits">
+                            <span>✓ Use existing photo</span>
+                            <span>✓ Quick upload</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Screen 4: Camera Guidance -->
+        <div id="camera-guidance-screen" class="screen">
+            <div class="screen-content">
+                <h2 class="screen-title">Document Capture Tips</h2>
+                
+                <div class="guidance-animation">
+                    <div class="phone-mockup">
+                        <div class="document-frame">
+                            <div class="document-placeholder">
+                                <span class="doc-text">Aadhaar Card</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tips-list">
+                    <div class="tip-item">
+                        <span class="tip-icon">💡</span>
+                        <span>Place document on flat surface</span>
+                    </div>
+                    <div class="tip-item">
+                        <span class="tip-icon">☀️</span>
+                        <span>Ensure good lighting</span>
+                    </div>
+                    <div class="tip-item">
+                        <span class="tip-icon">📏</span>
+                        <span>Keep document fully in frame</span>
+                    </div>
+                    <div class="tip-item">
+                        <span class="tip-icon">🤚</span>
+                        <span>Don't cover any part with fingers</span>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button class="btn btn-primary" id="open-camera-btn">
+                        <span class="btn-icon">📷</span>
+                        <span>Open Camera</span>
+                    </button>
+                    <button class="btn btn-secondary" id="watch-demo-btn">
+                        <span class="btn-icon">▶️</span>
+                        <span>Watch Demo</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Screen 5: Camera Capture -->
+        <div id="camera-capture-screen" class="screen">
+            <div class="camera-container">
+                <video id="camera-video" autoplay muted playsinline></video>
+                <canvas id="camera-canvas" style="display: none;"></canvas>
+                
+                <div class="camera-overlay">
+                    <div class="document-frame-overlay">
+                        <div class="frame-corners"></div>
+                        <div class="scan-line"></div>
+                    </div>
+                    
+                    <div class="camera-instructions">
+                        <p id="camera-instruction-text">Position document within the frame</p>
+                    </div>
+                </div>
+
+                <div class="camera-controls">
+                    <button class="camera-btn secondary" id="close-camera-btn">✕</button>
+                    <button class="camera-btn primary" id="capture-btn">📷</button>
+                    <button class="camera-btn secondary" id="flash-toggle-btn">⚡</button>
+                </div>
+
+                <div class="auto-capture-status">
+                    <div class="status-indicator" id="focus-indicator">
+                        <span class="status-icon">👁️</span>
+                        <span class="status-text">Focusing...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Screen 6: Image Review & Crop -->
+        <div id="image-review-screen" class="screen">
+            <div class="screen-content">
+                <h2 class="screen-title">Review Your Capture</h2>
+                <p class="screen-subtitle">Adjust if needed, then confirm</p>
+                
+                <div class="image-preview-container">
+                    <div class="image-preview">
+                        <img id="captured-image" alt="Captured document">
+                        <div class="crop-overlay" id="crop-overlay">
+                            <div class="crop-handle top-left"></div>
+                            <div class="crop-handle top-right"></div>
+                            <div class="crop-handle bottom-left"></div>
+                            <div class="crop-handle bottom-right"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="image-quality-check">
+                    <div class="quality-item">
+                        <span class="quality-icon" id="clarity-check">⌛</span>
+                        <span>Checking clarity...</span>
+                    </div>
+                    <div class="quality-item">
+                        <span class="quality-icon" id="lighting-check">⌛</span>
+                        <span>Checking lighting...</span>
+                    </div>
+                    <div class="quality-item">
+                        <span class="quality-icon" id="completeness-check">⌛</span>
+                        <span>Checking completeness...</span>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button class="btn btn-secondary" id="retake-photo-btn">
+                        <span class="btn-icon">🔄</span>
+                        <span>Retake Photo</span>
+                    </button>
+                    <button class="btn btn-primary" id="confirm-image-btn">
+                        <span>Looks Good</span>
+                        <span class="btn-icon">✓</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Screen 7: Data Extraction Review -->
+        <div id="data-review-screen" class="screen">
+            <div class="screen-content">
+                <h2 class="screen-title">Verify Your Details</h2>
+                <p class="screen-subtitle">Please check if the extracted details are correct</p>
+                
+                <div class="extraction-status">
+                    <div class="status-message">
+                        <span class="status-icon">🔍</span>
+                        <span>Extracting information...</span>
+                    </div>
+                </div>
+
+                <form class="data-form" id="extracted-data-form">
+                    <div class="form-group">
+                        <label for="extracted-name">Full Name</label>
+                        <input type="text" id="extracted-name" class="form-input" readonly>
+                        <button type="button" class="edit-btn" data-field="name">✏️</button>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="extracted-dob">Date of Birth</label>
+                        <input type="text" id="extracted-dob" class="form-input" readonly>
+                        <button type="button" class="edit-btn" data-field="dob">✏️</button>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="extracted-number">Document Number</label>
+                        <input type="text" id="extracted-number" class="form-input" readonly>
+                        <button type="button" class="edit-btn" data-field="number">✏️</button>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="extracted-address">Address</label>
+                        <textarea id="extracted-address" class="form-input" readonly rows="3"></textarea>
+                        <button type="button" class="edit-btn" data-field="address">✏️</button>
+                    </div>
+                </form>
+
+                <div class="confidence-indicator">
+                    <span>Extraction Confidence: </span>
+                    <div class="confidence-bar">
+                        <div class="confidence-fill" id="confidence-fill"></div>
+                    </div>
+                    <span id="confidence-percentage">--</span>
+                </div>
+
+                <div class="button-group">
+                    <button class="btn btn-secondary" id="edit-manually-btn">
+                        <span class="btn-icon">✏️</span>
+                        <span>Edit Details</span>
+                    </button>
+                    <button class="btn btn-primary" id="confirm-data-btn">
+                        <span>Details are Correct</span>
+                        <span class="btn-icon">✓</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Screen 8: Face Authentication Guidance -->
+        <div id="face-guidance-screen" class="screen">
+            <div class="screen-content">
+                <h2 class="screen-title">Face Verification</h2>
+                <p class="screen-subtitle">Now let's take a quick selfie for verification</p>
+                
+                <div class="face-guidance-illustration">
+                    <div class="phone-demo">
+                        <div class="face-frame">
+                            <div class="face-outline">😊</div>
+                        </div>
+                    </div>
+                    <div class="guidance-arrows">
+                        <div class="arrow-item">
+                            <span class="arrow">↔️</span>
+                            <span>Arm's length</span>
+                        </div>
+                        <div class="arrow-item">
+                            <span class="arrow">☀️</span>
+                            <span>Good lighting</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="face-tips">
+                    <div class="tip-item">
+                        <span class="tip-icon">📱</span>
+                        <span>Hold phone at eye level</span>
+                    </div>
+                    <div class="tip-item">
+                        <span class="tip-icon">😊</span>
+                        <span>Look directly at camera</span>
+                    </div>
+                    <div class="tip-item">
+                        <span class="tip-icon">🔆</span>
+                        <span>Face well-lit and clear</span>
+                    </div>
+                    <div class="tip-item">
+                        <span class="tip-icon">👓</span>
+                        <span>Remove sunglasses if wearing</span>
+                    </div>
+                </div>
+
+                <div class="privacy-note">
+                    <div class="privacy-icon">🔒</div>
+                    <p>Your face data is processed securely and never stored permanently</p>
+                </div>
+
+                <div class="button-group">
+                    <button class="btn btn-primary" id="start-face-scan-btn">
+                        <span class="btn-icon">📷</span>
+                        <span>Start Face Scan</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Screen 9: Face Capture (Liveness Check) -->
+        <div id="face-capture-screen" class="screen">
+            <div class="face-camera-container">
+                <video id="face-camera-video" autoplay muted playsinline></video>
+                <canvas id="face-canvas" style="display: none;"></canvas>
+                
+                <div class="face-overlay">
+                    <div class="face-frame-overlay">
+                        <div class="face-oval"></div>
+                        <div class="face-guide-dots">
+                            <div class="guide-dot top"></div>
+                            <div class="guide-dot bottom"></div>
+                            <div class="guide-dot left"></div>
+                            <div class="guide-dot right"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="liveness-instruction">
+                        <div class="instruction-box">
+                            <h3 id="liveness-instruction-title">Position your face in the oval</h3>
+                            <p id="liveness-instruction-text">Keep still and look at the camera</p>
+                            <div class="countdown-timer" id="countdown-timer"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="face-detection-status">
+                    <div class="status-indicators">
+                        <div class="indicator" id="face-detected-indicator">
+                            <span class="indicator-icon">👤</span>
+                            <span>Face Detected</span>
+                        </div>
+                        <div class="indicator" id="positioning-indicator">
+                            <span class="indicator-icon">🎯</span>
+                            <span>Positioning</span>
+                        </div>
+                        <div class="indicator" id="lighting-indicator">
+                            <span class="indicator-icon">💡</span>
+                            <span>Lighting</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="face-controls">
+                    <button class="camera-btn secondary" id="close-face-camera-btn">✕</button>
+                    <div class="capture-progress">
+                        <div class="progress-ring">
+                            <div class="progress-circle" id="capture-progress-circle"></div>
+                        </div>
+                    </div>
+                    <button class="camera-btn secondary" id="switch-camera-btn">🔄</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Screen 10: Processing & Results -->
+        <div id="processing-screen" class="screen">
+            <div class="screen-content">
+                <div class="processing-animation">
+                    <div class="shield-spinner">🛡️</div>
+                </div>
+                
+                <h2 class="screen-title">Verifying Your Details</h2>
+                <p class="screen-subtitle">Please wait while we process your information securely</p>
+                
+                <div class="processing-steps">
+                    <div class="step-item" id="step-document-validation">
+                        <span class="step-icon">⌛</span>
+                        <span>Validating document...</span>
+                    </div>
+                    <div class="step-item" id="step-face-verification">
+                        <span class="step-icon">⌛</span>
+                        <span>Verifying face...</span>
+                    </div>
+                    <div class="step-item" id="step-final-check">
+                        <span class="step-icon">⌛</span>
+                        <span>Final verification...</span>
+                    </div>
+                </div>
+
+                <div class="processing-time">
+                    <p>This usually takes 15-30 seconds</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Screen 11: Success/Failure Results -->
+        <div id="result-screen" class="screen">
+            <div class="screen-content">
+                <div class="result-icon" id="result-icon">
+                    <div class="success-icon">✅</div>
+                </div>
+                
+                <h2 class="screen-title" id="result-title">Verification Successful!</h2>
+                <p class="screen-subtitle" id="result-message">Your identity has been verified successfully</p>
+                
+                <div class="result-details" id="result-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Verification ID:</span>
+                        <span class="detail-value" id="verification-id">--</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Status:</span>
+                        <span class="detail-value status-verified">Verified</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Completed:</span>
+                        <span class="detail-value" id="completion-time">--</span>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button class="btn btn-secondary" id="download-certificate-btn">
+                        <span class="btn-icon">📄</span>
+                        <span>Download Certificate</span>
+                    </button>
+                    <button class="btn btn-primary" id="start-new-verification-btn">
+                        <span>Verify Another Document</span>
+                        <span class="btn-icon">+</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- File Upload Input (Hidden) -->
+        <input type="file" id="file-upload-input" accept="image/*" style="display: none;">
+    </div>
+
+    <!-- Offline Status Banner -->
+    <div id="offline-banner" class="offline-banner">
+        <span class="offline-icon">📱</span>
+        <span>You're offline. Data will sync when connection is restored.</span>
+        <button class="retry-btn" id="retry-sync-btn">Retry</button>
+    </div>
+
+    <!-- Error Modal -->
+    <div id="error-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="error-title">Something went wrong</h3>
+                <button class="close-btn" id="close-error-modal">✕</button>
+            </div>
+            <div class="modal-body">
+                <p id="error-message">Please try again</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="error-retry-btn">Try Again</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+        <!-- Load simplified JavaScript -->
+    <script src="src/js/app-simple.js"></script>
+</body>
+</html>
+</body>
+</html>

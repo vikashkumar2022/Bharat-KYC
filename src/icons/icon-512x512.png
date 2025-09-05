@@ -1,0 +1,46 @@
+<!-- Placeholder for icon-512x512.png -->
+<!-- This SVG serves as a template - convert to PNG for production -->
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4CAF50"/>
+      <stop offset="100%" style="stop-color:#2E7D32"/>
+    </linearGradient>
+  </defs>
+  
+  <rect width="512" height="512" rx="64" fill="url(#bg)"/>
+  
+  <!-- Main shield -->
+  <g transform="translate(128, 96)">
+    <path d="M128 32L64 64v56c0 64 42.667 106.667 64 106.667S192 184 192 120V64L128 32z" 
+          fill="#ffffff" opacity="0.95"/>
+    
+    <!-- Inner design -->
+    <circle cx="128" cy="120" r="40" fill="#2E7D32" opacity="0.2"/>
+    
+    <!-- Check mark -->
+    <path d="M96 120l20 20 40-40" 
+          stroke="#2E7D32" 
+          stroke-width="8" 
+          fill="none" 
+          stroke-linecap="round" 
+          stroke-linejoin="round"/>
+          
+    <!-- Document icon -->
+    <rect x="104" y="88" width="48" height="64" rx="4" fill="#2E7D32" opacity="0.1"/>
+    <rect x="108" y="92" width="40" height="4" fill="#2E7D32" opacity="0.3"/>
+    <rect x="108" y="100" width="32" height="2" fill="#2E7D32" opacity="0.3"/>
+    <rect x="108" y="106" width="36" height="2" fill="#2E7D32" opacity="0.3"/>
+  </g>
+  
+  <!-- Text -->
+  <text x="256" y="320" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="48" font-weight="bold">
+    BharatKYC
+  </text>
+  <text x="256" y="360" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="32" opacity="0.9">
+    Lite
+  </text>
+  <text x="256" y="400" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="20" opacity="0.7">
+    Secure • Simple • Fast
+  </text>
+</svg>

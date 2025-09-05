@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BharatKYC Lite - Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #2E7D32, #4CAF50);
+            margin: 0;
+            padding: 20px;
+            color: white;
+            text-align: center;
+        }
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        h1 {
+            margin: 0 0 20px 0;
+            font-size: 28px;
+        }
+        .features {
+            text-align: left;
+            margin: 20px 0;
+        }
+        .feature {
+            background: rgba(255,255,255,0.2);
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid #fff;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        .status {
+            margin: 20px 0;
+            padding: 10px;
+            background: rgba(76, 175, 80, 0.3);
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🛡️ BharatKYC Lite</h1>
+        <div class="status">✅ Application Working!</div>
+        
+        <div class="features">
+            <div class="feature">
+                <strong>📄 Document Verification</strong><br>
+                Aadhaar, PAN, Voter ID, Passport
+            </div>
+            <div class="feature">
+                <strong>📸 Smart Camera</strong><br>
+                Auto-capture with quality checks
+            </div>
+            <div class="feature">
+                <strong>🔒 Secure Processing</strong><br>
+                End-to-end encryption
+            </div>
+            <div class="feature">
+                <strong>📱 Offline Support</strong><br>
+                Works without internet
+            </div>
+        </div>
+        
+        <button onclick="startVerification()">🚀 Start Verification</button>
+        <button onclick="testAPI()">🔧 Test API</button>
+        
+        <div id="result" style="margin-top: 20px;"></div>
+    </div>
+
+    <script>
+        function startVerification() {
+            document.getElementById('result').innerHTML = 
+                '<div style="background: rgba(76, 175, 80, 0.3); padding: 10px; border-radius: 5px; margin-top: 10px;">' +
+                '✅ Verification process would start here!<br>' +
+                'Full PWA features available in main app.' +
+                '</div>';
+        }
+        
+        async function testAPI() {
+            try {
+                const response = await fetch('http://localhost:3010/api/health');
+                const data = await response.json();
+                document.getElementById('result').innerHTML = 
+                    '<div style="background: rgba(76, 175, 80, 0.3); padding: 10px; border-radius: 5px; margin-top: 10px;">' +
+                    '✅ API Connection Successful!<br>' +
+                    'Backend: ' + data.status + '<br>' +
+                    'Server: Running on port 3010' +
+                    '</div>';
+            } catch (error) {
+                document.getElementById('result').innerHTML = 
+                    '<div style="background: rgba(244, 67, 54, 0.3); padding: 10px; border-radius: 5px; margin-top: 10px;">' +
+                    '❌ API Connection Failed<br>' +
+                    'Error: ' + error.message +
+                    '</div>';
+            }
+        }
+        
+        // Auto-test on load
+        window.onload = function() {
+            console.log('🚀 BharatKYC Lite Test Page Loaded');
+            testAPI();
+        };
+    </script>
+</body>
+</html>

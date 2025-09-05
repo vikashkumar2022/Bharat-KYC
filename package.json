@@ -1,0 +1,64 @@
+{
+  "name": "bharatkyc-lite",
+  "version": "1.0.0",
+  "description": "Progressive Web App for document verification and KYC compliance in India",
+  "main": "index.html",
+  "scripts": {
+    "start": "python -m http.server 3000 2>/dev/null || python3 -m http.server 3000 2>/dev/null || npx serve . -p 3000",
+    "dev": "npx live-server --port=3000 --host=localhost --cors",
+    "build": "npm run minify && npm run sw-cache",
+    "minify": "npx html-minifier --input-dir . --output-dir dist --file-ext html && npx clean-css-cli -o dist/src/css/main.css src/css/main.css && npx terser src/js/app.js -o dist/src/js/app.js",
+    "sw-cache": "npx workbox generateSW workbox-config.js",
+    "test": "npx playwright test",
+    "lint": "npx eslint src/js/ --ext .js",
+    "format": "npx prettier --write .",
+    "server": "cd server && npm start",
+    "server:dev": "cd server && npm run dev",
+    "docker:build": "docker build -t bharatkyc-lite .",
+    "docker:run": "docker run -p 3000:3000 bharatkyc-lite",
+    "deploy": "npm run build && npx gh-pages -d dist"
+  },
+  "keywords": [
+    "pwa",
+    "kyc",
+    "document-verification",
+    "aadhaar",
+    "pan",
+    "offline-first",
+    "india",
+    "digilocker"
+  ],
+  "author": "BharatKYC Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bharatkyc/bharatkyc-lite.git"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.37.1",
+    "clean-css-cli": "^5.6.2",
+    "eslint": "^8.47.0",
+    "gh-pages": "^6.0.0",
+    "html-minifier": "^4.0.0",
+    "live-server": "^1.2.2",
+    "prettier": "^3.0.2",
+    "serve": "^14.2.1",
+    "terser": "^5.19.2",
+    "workbox-cli": "^7.0.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead",
+    "not ie 11"
+  ],
+  "pwa": {
+    "name": "BharatKYC Lite",
+    "short_name": "BharatKYC",
+    "theme_color": "#2E7D32",
+    "background_color": "#2E7D32",
+    "display": "standalone",
+    "scope": "/",
+    "start_url": "/"
+  }
+}
